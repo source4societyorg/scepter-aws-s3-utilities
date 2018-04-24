@@ -1,10 +1,11 @@
 
 import { valueOrDefault } from '@source4society/scepter-utility-lib';
-export const sendRequestToS3 = (requestHandler, file, signedUrl, contentType, injectedHeaders, injectedOptions) => {
+export const sendRequestToS3 = (requestHandler, file, signedUrl, contentType, injectedMethod, injectedHeaders, injectedOptions) => {
+  const method = valueOrDefault(injectedMethod, 'PUT');
   const additionalHeaders = valueOrDefault(injectedHeaders, []);
   const additionalOptions = valueOrDefault(injectedOptions, []);
   return requestHandler(signedUrl, {
-    method: 'PUT',
+    method,
     headers: {
       'Content-Type': contentType,
       ...additionalHeaders,
