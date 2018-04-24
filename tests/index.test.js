@@ -1,4 +1,4 @@
-import { sendRequestToS3 } from '../src';
+import { sendRequestToS3, getContentTypeFromExtension } from '../src';
 
 test('sendRequestToS3 forms an S3 PUT request object and passes it to the request handler', () => {
   const mockRequestResult = 'mockRequestResult';
@@ -23,4 +23,18 @@ test('sendRequestToS3 forms an S3 PUT request object and passes it to the reques
   };
 
   expect(sendRequestToS3(mockRequestHandler, mockFile, mockSignedUrl, mockContentType, mockAdditionalHeaders, mockAdditionalOptions)).toEqual(mockRequestResult);
+});
+
+test('getContenTypeFromExtension returns content types for common extensions', () => {
+  expect(getContentTypeFromExtension('file.jpg')).toEqual('image/jpeg');
+  expect(getContentTypeFromExtension('file.jpeg')).toEqual('image/jpeg');
+  expect(getContentTypeFromExtension('file.png')).toEqual('image/png');
+  expect(getContentTypeFromExtension('file.docx')).toEqual('application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+  expect(getContentTypeFromExtension('file.xlsx')).toEqual('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  expect(getContentTypeFromExtension('file.xls')).toEqual('application/vnd.ms-excel');
+  expect(getContentTypeFromExtension('file.pdf')).toEqual('application/pdf');
+  expect(getContentTypeFromExtension('file.gif')).toEqual('image/gif');
+  expect(getContentTypeFromExtension('file.tif')).toEqual('image/tiff');
+  expect(getContentTypeFromExtension('file.tiff')).toEqual('image/tiff');
+  expect(getContentTypeFromExtension()).toBeUndefined();
 });
