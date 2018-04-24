@@ -1,9 +1,9 @@
 {
-  "name": "@source4society/yourcomponentname",
+  "name": "@source4society/scepter-aws-s3-utilities",
   "version": "1.0.0",
-  "description": "Add your description here",
+  "description": "Useful utilities for common AWS S3 situations",
   "main": "lib/index.js",
-  "repository": "https://github.com/source4societyorg/yourrepository.git",
+  "repository": "https://github.com/source4societyorg/scepter-aws-s3-utilities.git",
   "author": "Source 4 Society",
   "license": "AGPL-3.0",
   "private": false,
@@ -41,7 +41,7 @@
     "testRegex": "tests/.*\\.test\\.js$"
   },
   "dependencies": {
-    "@source4society/scepter-utility-lib": "^1.1.0",
+    "@source4society/scepter-utility-lib": "^2.1.0",
     "immutable": "3.8.1",
     "moment": "^2.20.1",
     "react": "15.6.1",
