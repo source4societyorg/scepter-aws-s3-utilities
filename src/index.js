@@ -6,7 +6,7 @@ export const asyncFileReader = (file, injectedFileReader, injectedReadFunctionNa
     const FileReaderClass = valueOrDefault(injectedFileReader, FileReader);
     const reader = new FileReaderClass();
     reader.onloadend = resolve;
-    const readFunctionName = valueOrDefault(injectedReadFunctionName, reader.readAsText && reader.readAsText.name);
+    const readFunctionName = valueOrDefault(injectedReadFunctionName, reader.readAsArrayBuffer && reader.readAsArrayBuffer.name);
     reader[readFunctionName](file);
   } catch (exception) {
     reject(exception);

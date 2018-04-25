@@ -61,6 +61,10 @@ test('asyncFileReader calls reject if it catches an error', (done) => {
   const mockFile = 'fakeFile';
   const mockError = new Error('mockError');
   const mockFileReader = class {
+    readAsArrayBuffer() {
+      return 'mockArrayBuffer';
+    }
+
     mockFunction() {
       throw mockError;
     }
