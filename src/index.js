@@ -5,8 +5,8 @@ export const asyncFileReader = (file, injectedFileReader, injectedReadFunctionNa
   try {
     const FileReaderClass = valueOrDefault(injectedFileReader, FileReader);
     const reader = new FileReaderClass();
-    reader.onload = resolve;
-    const readFunctionName = valueOrDefault(injectedReadFunctionName, reader.readAsText.name);
+    reader.onloadend = resolve;
+    const readFunctionName = valueOrDefault(injectedReadFunctionName, reader.readAsText && reader.readAsText.name);
     reader[readFunctionName](file);
   } catch (exception) {
     reject(exception);

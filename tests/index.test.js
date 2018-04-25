@@ -46,7 +46,7 @@ test('asyncFileReader initiates a specified file reading function and returns a 
   const mockResult = 'mockResult';
   const mockFileReader = class {
     mockFunction() {
-      this.onload(mockResult);
+      this.onloadend(mockResult);
     }
   };
   const mockReadFunctionName = 'mockFunction';

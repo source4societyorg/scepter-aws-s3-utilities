@@ -1,6 +1,6 @@
 {
   "name": "@source4society/scepter-aws-s3-utilities",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Useful utilities for common AWS S3 situations",
   "main": "lib/index.js",
   "repository": "https://github.com/source4societyorg/scepter-aws-s3-utilities.git",
