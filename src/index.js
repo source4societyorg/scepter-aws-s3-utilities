@@ -1,5 +1,18 @@
 
 import { valueOrDefault } from '@source4society/scepter-utility-lib';
+
+export const asyncFileReader = (file, injectedFileReader, injectedReadFunctionName) => new Promise((resolve, reject) => {
+  try {
+    const FileReaderClass = valueOrDefault(injectedFileReader, FileReader);
+    const reader = new FileReaderClass();
+    reader.onload = resolve;
+    const readFunctionName = valueOrDefault(injectedReadFunctionName, reader.readAsText);
+    reader[readFunctionName](file);
+  } catch (exception) {
+    reject(exception);
+  }
+});
+
 export const sendRequestToS3 = (requestHandler, file, signedUrl, contentType, injectedMethod, injectedHeaders, injectedOptions) => {
   const method = valueOrDefault(injectedMethod, 'PUT');
   const additionalHeaders = valueOrDefault(injectedHeaders, []);

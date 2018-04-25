@@ -1,8 +1,9 @@
-import { sendRequestToS3, getContentTypeFromExtension } from '../src';
+import { sendRequestToS3, getContentTypeFromExtension, asyncFileReader } from '../src';
 
 test('sendRequestToS3 forms an S3 PUT request object and passes it to the request handler', () => {
   const mockRequestResult = 'mockRequestResult';
   const mockSignedUrl = 'mockSignedUrl';
+  const mockMethod = 'mockMethod';
   const mockAdditionalHeaders = ['mockHeader1', 'mockHeader2', 'mockHeader3'];
   const mockAdditionalOptions = ['mockAdditionalOptions1', 'mockAdditionalOptions2'];
   const mockContentType = 'mockContentType';
@@ -11,7 +12,7 @@ test('sendRequestToS3 forms an S3 PUT request object and passes it to the reques
   const mockRequestHandler = (url, parameters) => {
     expect(url).toEqual(mockSignedUrl);
     expect(parameters).toEqual({
-      method: 'PUT',
+      method: mockMethod,
       headers: {
         'Content-Type': mockContentType,
         ...mockAdditionalHeaders,
@@ -22,7 +23,7 @@ test('sendRequestToS3 forms an S3 PUT request object and passes it to the reques
     return mockRequestResult;
   };
 
-  expect(sendRequestToS3(mockRequestHandler, mockFile, mockSignedUrl, mockContentType, mockAdditionalHeaders, mockAdditionalOptions)).toEqual(mockRequestResult);
+  expect(sendRequestToS3(mockRequestHandler, mockFile, mockSignedUrl, mockContentType, mockMethod, mockAdditionalHeaders, mockAdditionalOptions)).toEqual(mockRequestResult);
 });
 
 test('getContenTypeFromExtension returns content types for common extensions', () => {
@@ -37,4 +38,38 @@ test('getContenTypeFromExtension returns content types for common extensions', (
   expect(getContentTypeFromExtension('file.tif')).toEqual('image/tiff');
   expect(getContentTypeFromExtension('file.tiff')).toEqual('image/tiff');
   expect(getContentTypeFromExtension()).toBeUndefined();
+});
+
+
+test('asyncFileReader initiates a specified file reading function and returns a promise', (done) => {
+  const mockFile = 'fakeFile';
+  const mockResult = 'mockResult';
+  const mockFileReader = class {
+    mockFunction() {
+      this.onload(mockResult);
+    }
+  };
+  const mockReadFunctionName = 'mockFunction';
+  const promise = asyncFileReader(mockFile, mockFileReader, mockReadFunctionName);
+  promise.then((result) => {
+    expect(result).toEqual(mockResult);
+    done();
+  });
+});
+
+test('asyncFileReader calls reject if it catches an error', (done) => {
+  const mockFile = 'fakeFile';
+  const mockError = new Error('mockError');
+  const mockFileReader = class {
+    mockFunction() {
+      throw mockError;
+    }
+  };
+  const mockReadFunctionName = 'mockFunction';
+  const promise = asyncFileReader(mockFile, mockFileReader, mockReadFunctionName);
+  asyncFileReader(mockFile, mockFileReader, mockReadFunctionName);
+  promise.catch((exception) => {
+    expect(exception).toEqual(mockError);
+    done();
+  });
 });
